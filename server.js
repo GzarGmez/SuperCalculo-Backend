@@ -7,11 +7,8 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'supermarket_db',
-  password: 'admin123', // Confirma que sea tu contraseña
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 // --- RUTA USUARIOS ---
@@ -207,4 +204,5 @@ app.delete('/api/historial/:id', async (req, res) => {
   }
 });
 
-app.listen(3002, () => console.log('Backend activo en http://localhost:3002'));
+const PORT = process.env.PORT || 3002;
+app.listen(PORT, () => console.log(`Backend activo en el puerto ${PORT}`));
